@@ -5,10 +5,11 @@ import { writeDigest } from "./write";
 import { translateToZh } from "./translate";
 import { publishDigests } from "./publish";
 import { reportError } from "./alert";
+import { makeClient } from "./ai";
 import sourcesJson from "../../shared/sources.json";
 
 export interface Env {
-  AI: Ai;
+  NVIDIA_API_KEY: string;
   SEEN_ITEMS: KVNamespace;
   SOURCE_STATE: KVNamespace;
   GITHUB_TOKEN: string;
@@ -45,6 +46,7 @@ async function run(env: Env): Promise<void> {
 }
 
 async function runPipeline(env: Env, today: string): Promise<void> {
+  const aiClient = makeClient(env.NVIDIA_API_KEY);
 
   const items = await fetchAllSources(sourcesJson as Parameters<typeof fetchAllSources>[0], env.SEEN_ITEMS);
   console.log(`[ai-digest] Fetched ${items.length} new items`);
@@ -57,13 +59,13 @@ async function runPipeline(env: Env, today: string): Promise<void> {
   const scored = scoreItems(items, sourcesJson);
   console.log(`[ai-digest] Scored ${scored.length} items`);
 
-  const curated = await curateDigest(scored, env.AI);
+  const curated = await curateDigest(scored, aiClient);
   console.log(`[ai-digest] Curated: ${curated.features.length} features, ${curated.briefs.length} briefs`);
 
-  const enPost = await writeDigest(curated, scored, today, env.AI);
+  const enPost = await writeDigest(curated, scored, today, aiClient);
   console.log(`[ai-digest] Wrote EN digest: "${enPost.title}"`);
 
-  const zhPost = await translateToZh(enPost, env.AI);
+  const zhPost = await translateToZh(enPost, aiClient);
   console.log(`[ai-digest] Translated ZH digest`);
 
   if (env.DRY_RUN === "true") {

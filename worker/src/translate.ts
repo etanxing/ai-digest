@@ -1,26 +1,21 @@
+import type OpenAI from "openai";
+import { chat } from "./ai";
 import type { DigestPost } from "../../shared/types";
 
-export async function translateToZh(enPost: DigestPost, ai: Ai): Promise<DigestPost> {
-  const prompt = `Translate the following AI news digest from English to Simplified Chinese.
-Preserve all markdown formatting, headings, and links exactly.
-Keep proper nouns (company names, model names) in their original form.
-Translate naturally — not word-for-word.
+export async function translateToZh(enPost: DigestPost, client: OpenAI): Promise<DigestPost> {
+  const system = `You are a professional translator specialising in technology journalism. Translate English to Simplified Chinese naturally and accurately. Preserve all markdown formatting and hyperlinks exactly. Keep proper nouns (company names, model names, product names) in their original English form.`;
+
+  const user = `Translate this AI news digest to Simplified Chinese.
+
+Return ONLY the translated content — the title on the first line, then the body. No preamble or explanation.
 
 Title: ${enPost.title}
 
-Content:
-${enPost.content}
+${enPost.content}`;
 
-Return ONLY the translated title on the first line, then the translated content. No preamble.`;
-
-  const response = await ai.run("@cf/meta/llama-3.3-70b-instruct-fp8-fast", {
-    prompt,
-    max_tokens: 3000,
-  }) as { response?: string };
-
-  const text = (response?.response ?? "").trim();
+  const text = (await chat(client, system, user, 4000)).trim();
   const lines = text.split("\n");
-  const zhTitle = lines[0]?.trim() || enPost.title;
+  const zhTitle = lines[0]?.replace(/^#+\s*/, "").trim() || enPost.title;
   const zhContent = lines.slice(1).join("\n").trim();
 
   return {

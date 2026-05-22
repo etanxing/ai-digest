@@ -3,20 +3,17 @@ main = "src/index.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-[ai]
-binding = "AI"
-
 [[kv_namespaces]]
 binding = "SEEN_ITEMS"
-id = "PLACEHOLDER_SEEN_ITEMS_ID"
+id = "d80ca40d7b0f4c6f886fff123d64d483"
 
 [[kv_namespaces]]
 binding = "SOURCE_STATE"
-id = "PLACEHOLDER_SOURCE_STATE_ID"
+id = "0ff12f4d2cbe4774b1b12794913965ff"
 
 [vars]
-GITHUB_REPO = "OWNER/ai-digest"
+GITHUB_REPO = "etanxing/ai-digest"
 DRY_RUN = "false"
 
-[[triggers]]
+[triggers]
 crons = ["0 9 * * *"]
