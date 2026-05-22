@@ -1,8 +1,34 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale, t, locales } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { listPosts } from "@/lib/posts";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const strings = t[locale as Locale];
+  return {
+    title: strings.siteTitle,
+    description: strings.subtagline,
+    openGraph: {
+      title: strings.siteTitle,
+      description: strings.subtagline,
+      url: `https://ai-digest.isawesome.work/${locale}`,
+      siteName: "AI Digest",
+      type: "website",
+    },
+    alternates: {
+      canonical: `https://ai-digest.isawesome.work/${locale}`,
+      languages: { en: "/en", zh: "/zh" },
+    },
+  };
+}
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

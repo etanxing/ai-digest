@@ -1,9 +1,41 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { isLocale, t, locales } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getPost, allPostDates } from "@/lib/posts";
 import { markdownToSafeHtml } from "@/lib/markdown";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; date: string }>;
+}): Promise<Metadata> {
+  const { locale, date } = await params;
+  if (!isLocale(locale)) return {};
+  const post = getPost(date, locale as Locale);
+  if (!post) return {};
+  const url = `https://ai-digest.isawesome.work/${locale}/${date}`;
+  return {
+    title: `${post.title} — AI Digest`,
+    description: `${post.storyCount} stories curated from ${post.sourceCount} sources.`,
+    openGraph: {
+      title: post.title,
+      description: `${post.storyCount} stories curated from ${post.sourceCount} sources.`,
+      url,
+      siteName: "AI Digest",
+      type: "article",
+      publishedTime: post.date,
+    },
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `/en/${date}`,
+        zh: `/zh/${date}`,
+      },
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const dates = allPostDates();

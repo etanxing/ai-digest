@@ -4,6 +4,7 @@ import { curateDigest } from "./curate";
 import { writeDigest } from "./write";
 import { translateToZh } from "./translate";
 import { publishDigests } from "./publish";
+import { reportError } from "./alert";
 import sourcesJson from "../../shared/sources.json";
 
 export interface Env {
@@ -33,6 +34,17 @@ export default {
 async function run(env: Env): Promise<void> {
   const today = new Date().toISOString().slice(0, 10);
   console.log(`[ai-digest] Starting pipeline for ${today}`);
+  try {
+    await runPipeline(env, today);
+  } catch (err) {
+    console.error("[ai-digest] Pipeline failed:", err);
+    if (env.DRY_RUN !== "true") {
+      await reportError(err, today, env.GITHUB_TOKEN, env.GITHUB_REPO);
+    }
+  }
+}
+
+async function runPipeline(env: Env, today: string): Promise<void> {
 
   const items = await fetchAllSources(sourcesJson as Parameters<typeof fetchAllSources>[0], env.SEEN_ITEMS);
   console.log(`[ai-digest] Fetched ${items.length} new items`);
