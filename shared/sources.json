@@ -1,0 +1,16 @@
+[
+  { "name": "OpenAI Blog", "url": "https://openai.com/blog/rss.xml", "weight": 1.0, "type": "rss" },
+  { "name": "Anthropic News", "url": "https://www.anthropic.com/news/rss.xml", "weight": 1.0, "type": "rss" },
+  { "name": "Google AI Blog", "url": "https://blog.google/technology/ai/rss/", "weight": 1.0, "type": "rss" },
+  { "name": "DeepMind Blog", "url": "https://deepmind.google/blog/rss.xml", "weight": 0.9, "type": "rss" },
+  { "name": "Meta AI", "url": "https://ai.meta.com/blog/feed/", "weight": 0.9, "type": "rss" },
+  { "name": "NVIDIA AI Blog", "url": "https://blogs.nvidia.com/ai-data-science/feed/", "weight": 0.8, "type": "rss" },
+  { "name": "MIT Technology Review AI", "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed/", "weight": 0.9, "type": "rss" },
+  { "name": "TechCrunch AI", "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "weight": 0.8, "type": "rss" },
+  { "name": "The Verge AI", "url": "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml", "weight": 0.8, "type": "rss" },
+  { "name": "Hacker News", "url": "https://hnrss.org/frontpage?points=100", "weight": 0.7, "type": "rss" },
+  { "name": "HuggingFace Papers", "url": "https://huggingface.co/blog/feed.xml", "weight": 0.8, "type": "rss" },
+  { "name": "Wired AI", "url": "https://www.wired.com/feed/tag/ai/latest/rss", "weight": 0.7, "type": "rss" },
+  { "name": "VentureBeat AI", "url": "https://venturebeat.com/category/ai/feed/", "weight": 0.7, "type": "rss" },
+  { "name": "The Information AI", "url": "https://www.theinformation.com/feed", "weight": 0.6, "type": "rss" }
+]

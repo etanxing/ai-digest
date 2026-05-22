@@ -1,0 +1,22 @@
+name = "ai-digest-pipeline"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "SEEN_ITEMS"
+id = "PLACEHOLDER_SEEN_ITEMS_ID"
+
+[[kv_namespaces]]
+binding = "SOURCE_STATE"
+id = "PLACEHOLDER_SOURCE_STATE_ID"
+
+[vars]
+GITHUB_REPO = "OWNER/ai-digest"
+DRY_RUN = "false"
+
+[[triggers]]
+crons = ["0 9 * * *"]

@@ -1,0 +1,24 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@octokit/rest": "^22.0.1",
+    "fast-xml-parser": "^5.8.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260522.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.93.1"
+  }
+}
