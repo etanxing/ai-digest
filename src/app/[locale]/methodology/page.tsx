@@ -39,7 +39,7 @@ const content: Record<Locale, { title: string; body: React.ReactNode }> = {
           <li>No editorial agenda, no sponsors.</li>
         </ul>
         <h2>Cadence</h2>
-        <p>Published daily by 09:00 UTC. Available in English and Chinese.</p>
+        <p>Published daily by 09:00 ACST (Adelaide). Available in English and Chinese.</p>
       </>
     ),
   },
@@ -75,7 +75,7 @@ const content: Record<Locale, { title: string; body: React.ReactNode }> = {
           <li>无编辑立场，无赞助商。</li>
         </ul>
         <h2>更新频率</h2>
-        <p>每日北京时间 17:00 前发布，提供中英双语版本。</p>
+        <p>每日阿德莱德时间 09:00 前发布（北京时间 06:30），提供中英双语版本。</p>
       </>
     ),
   },
