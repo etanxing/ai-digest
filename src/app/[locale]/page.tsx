@@ -52,7 +52,8 @@ export default async function IndexPage({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const strings = t[locale as Locale];
-  const posts = listPosts(locale as Locale);
+  const allPosts = listPosts(locale as Locale);
+  const posts = allPosts.slice(0, 14);
 
   return (
     <div>
@@ -68,6 +69,7 @@ export default async function IndexPage({
       ) : (
         <div className="divide-y" style={{ borderColor: "var(--border)" }}>
           {posts.map((post) => (
+
             <article key={post.date} className="py-7">
               <p
                 className="text-xs font-medium uppercase tracking-widest mb-2"
@@ -108,6 +110,18 @@ export default async function IndexPage({
               </p>
             </article>
           ))}
+        </div>
+      )}
+
+      {allPosts.length > 14 && (
+        <div className="mt-8 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+          <Link
+            href={`/${locale}/archive`}
+            className="text-sm hover:opacity-70 transition-opacity"
+            style={{ color: "var(--muted)" }}
+          >
+            {locale === "zh" ? "查看全部存档 →" : "View all archives →"}
+          </Link>
         </div>
       )}
     </div>

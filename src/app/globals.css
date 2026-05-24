@@ -56,6 +56,38 @@ body {
   transition: background 0.15s, color 0.15s;
 }
 
+/* ── Digest numbered sections ── */
+.prose .story-num {
+  color: var(--accent);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-right: 0.45em;
+  font-variant-numeric: tabular-nums;
+  vertical-align: baseline;
+}
+
+.prose .brief-num {
+  color: var(--accent);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-right: 0.45em;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 1.6em;
+}
+
+.prose li.brief-item {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.prose h3 + ul {
+  padding-left: 0 !important;
+}
+
 /* ── Prose dark-mode overrides ── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .prose {
