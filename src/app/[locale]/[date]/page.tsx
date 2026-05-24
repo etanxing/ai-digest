@@ -75,27 +75,52 @@ export default async function PostPage({
 
   return (
     <article>
-      <div className="mb-8">
-        <div className="text-xs text-neutral-400 uppercase tracking-wide mb-2">
+      {/* Header */}
+      <div className="mb-10">
+        <p
+          className="text-xs font-medium uppercase tracking-widest mb-3"
+          style={{ color: "var(--subtle)" }}
+        >
           {formatDate(post.date, locale as Locale)}
-        </div>
-        <h1 className="text-xl font-bold tracking-tight mb-3">{post.title}</h1>
-        <div className="flex items-center gap-4 text-xs text-neutral-400">
+        </p>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight leading-snug mb-5">
+          {post.title}
+        </h1>
+        <div
+          className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm pt-4"
+          style={{
+            color: "var(--muted)",
+            borderTop: "1px solid var(--border)",
+          }}
+        >
           <span>{post.storyCount} {strings.storiesLabel}</span>
+          <span style={{ color: "var(--border)" }}>·</span>
           <span>{post.sourceCount} {strings.sources}</span>
-          <Link href={`/${otherLocale}/${date}`} className="hover:text-neutral-700 ml-auto">
+          <Link
+            href={`/${otherLocale}/${date}`}
+            className="ml-auto hover:opacity-70 transition-opacity"
+            style={{ color: "var(--accent)" }}
+          >
             {strings.langLabel}
           </Link>
         </div>
       </div>
 
-      <div
-        className="prose prose-sm prose-neutral max-w-none"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      {/* Body */}
+      <div className="prose prose-neutral max-w-none" style={{ "--tw-prose-links": "var(--accent)" } as React.CSSProperties}>
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </div>
 
-      <div className="mt-10 pt-6 border-t border-neutral-100">
-        <Link href={`/${locale}`} className="text-sm text-neutral-500 hover:text-neutral-900">
+      {/* Footer nav */}
+      <div
+        className="mt-12 pt-6"
+        style={{ borderTop: "1px solid var(--border)" }}
+      >
+        <Link
+          href={`/${locale}`}
+          className="text-sm hover:opacity-70 transition-opacity"
+          style={{ color: "var(--muted)" }}
+        >
           ← Back to all digests
         </Link>
       </div>

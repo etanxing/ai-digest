@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,7 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script src="/theme-init.js" strategy="beforeInteractive" />
+      </head>
       <body className="min-h-full">{children}</body>
     </html>
   );

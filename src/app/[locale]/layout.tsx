@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { locales, isLocale, t } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -19,32 +20,69 @@ export default async function LocaleLayout({
   const strings = t[locale as Locale];
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900 antialiased">
-      <header className="border-b border-neutral-200">
-        <nav className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-6 text-sm">
-          <Link href={`/${locale}`} className="font-semibold tracking-tight mr-auto">
-            {strings.siteTitle}
+    <div
+      className="min-h-screen antialiased flex flex-col"
+      style={{ background: "var(--bg)", color: "var(--fg)" }}
+    >
+      {/* Accent top bar */}
+      <div className="h-[3px]" style={{ background: "var(--accent)" }} />
+
+      <header style={{ borderBottom: "1px solid var(--border)" }}>
+        <nav className="max-w-3xl mx-auto px-5 py-3.5 flex items-center gap-5">
+          <Link
+            href={`/${locale}`}
+            className="font-bold tracking-tight text-base mr-auto flex items-center gap-2.5"
+            style={{ color: "var(--fg)" }}
+          >
+            AI Digest
+            <span
+              className="text-[11px] font-medium px-1.5 py-0.5 rounded-full hidden sm:inline"
+              style={{
+                background: "var(--surface)",
+                color: "var(--muted)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              Daily Briefing
+            </span>
           </Link>
-          <Link href={`/${locale}/methodology`} className="text-neutral-500 hover:text-neutral-900 transition-colors">
+          <Link
+            href={`/${locale}/methodology`}
+            className="text-sm transition-opacity hover:opacity-70"
+            style={{ color: "var(--muted)" }}
+          >
             {strings.methodology}
           </Link>
           <Link
             href={locale === "en" ? "/zh" : "/en"}
-            className="text-neutral-500 hover:text-neutral-900 transition-colors"
+            className="text-sm transition-opacity hover:opacity-70"
+            style={{ color: "var(--muted)" }}
           >
             {strings.langLabel}
           </Link>
+          <ThemeToggle />
         </nav>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-10">
+      <main className="max-w-3xl mx-auto px-5 py-12 w-full flex-1">
         {children}
       </main>
 
-      <footer className="border-t border-neutral-200 mt-16">
-        <div className="max-w-2xl mx-auto px-4 py-6 text-xs text-neutral-500 flex flex-wrap gap-4">
-          <Link href={`/${locale}`} className="hover:text-neutral-900">Archive</Link>
-          <Link href={`/${locale}/methodology`} className="hover:text-neutral-900">{strings.methodology}</Link>
+      <footer style={{ borderTop: "1px solid var(--border)" }}>
+        <div
+          className="max-w-3xl mx-auto px-5 py-5 text-xs flex flex-wrap gap-5"
+          style={{ color: "var(--subtle)" }}
+        >
+          <Link href={`/${locale}`} className="hover:opacity-70 transition-opacity">
+            Archive
+          </Link>
+          <Link href={`/${locale}/methodology`} className="hover:opacity-70 transition-opacity">
+            {strings.methodology}
+          </Link>
+          <Link href={`/${locale}/rss.xml`} className="hover:opacity-70 transition-opacity">
+            RSS
+          </Link>
+          <span className="ml-auto">AI-curated · No sponsors</span>
         </div>
       </footer>
     </div>

@@ -89,11 +89,22 @@ export default async function MethodologyPage({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const page = content[locale as Locale];
+  const strings = t[locale as Locale];
 
   return (
-    <div className="prose prose-sm prose-neutral max-w-none">
-      <h1>{page.title}</h1>
-      {page.body}
+    <div>
+      <div className="mb-8">
+        <p
+          className="text-xs font-medium uppercase tracking-widest mb-3"
+          style={{ color: "var(--subtle)" }}
+        >
+          {strings.methodology}
+        </p>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{page.title}</h1>
+      </div>
+      <div className="prose prose-neutral max-w-none">
+        {page.body}
+      </div>
     </div>
   );
 }

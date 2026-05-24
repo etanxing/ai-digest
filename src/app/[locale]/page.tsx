@@ -56,31 +56,44 @@ export default async function IndexPage({
 
   return (
     <div>
-      <div className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight mb-1">{strings.tagline}</h1>
-        <p className="text-neutral-500 text-sm">{strings.subtagline}</p>
+      <div className="mb-12">
+        <h1 className="text-3xl font-bold tracking-tight mb-2">{strings.tagline}</h1>
+        <p className="text-base" style={{ color: "var(--muted)" }}>
+          {strings.subtagline}
+        </p>
       </div>
 
       {posts.length === 0 ? (
-        <p className="text-neutral-400">{strings.noPostsYet}</p>
+        <p style={{ color: "var(--subtle)" }}>{strings.noPostsYet}</p>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-1">
           {posts.map((post) => (
-            <article key={post.date} className="border-b border-neutral-100 pb-8">
-              <div className="text-xs text-neutral-400 mb-2 uppercase tracking-wide">
-                {formatDate(post.date, locale as Locale)}
-              </div>
+            <article key={post.date}>
               <Link
                 href={`/${locale}/${post.date}`}
-                className="block group"
+                className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-5 px-4 py-4 -mx-4 rounded-lg transition-colors"
+                style={{ ["--hover-bg" as string]: "var(--surface)" }}
+                onMouseEnter={undefined}
               >
-                <h2 className="text-base font-semibold group-hover:underline mb-1">
-                  {post.title}
-                </h2>
+                <span
+                  className="text-xs font-medium tabular-nums shrink-0 pt-0.5"
+                  style={{ color: "var(--subtle)" }}
+                >
+                  {formatDate(post.date, locale as Locale)}
+                </span>
+                <span className="flex-1">
+                  <span
+                    className="font-semibold text-base group-hover:underline underline-offset-2"
+                    style={{ color: "var(--fg)" }}
+                  >
+                    {post.title}
+                  </span>
+                  <span className="text-xs ml-3" style={{ color: "var(--subtle)" }}>
+                    {post.sourceCount} {strings.sources}
+                  </span>
+                </span>
               </Link>
-              <p className="text-xs text-neutral-400 mt-2">
-                {post.sourceCount} {strings.sources}
-              </p>
+              <div className="h-px mx-0" style={{ background: "var(--border)" }} />
             </article>
           ))}
         </div>
