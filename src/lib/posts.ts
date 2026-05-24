@@ -12,22 +12,48 @@ export interface PostMeta {
   storyCount: number;
   briefCount: number;
   sourceCount: number;
+  stories: string[];
+  slug: string;
 }
 
 export interface Post extends PostMeta {
   content: string;
 }
 
+export function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 60)
+    .replace(/-$/, "");
+}
+
+export function postSlug(date: string, title: string): string {
+  return `${date}-${slugify(title)}`;
+}
+
+function extractStories(content: string): string[] {
+  const matches = content.matchAll(/^##\s+\d+\.\s+(.+)$/gm);
+  return Array.from(matches, (m) => m[1].trim()).slice(0, 3);
+}
+
 function parseFile(filePath: string): Post {
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
+  const title = data.title as string;
+  const date = data.date as string;
   return {
-    date: data.date as string,
+    date,
     locale: data.locale as Locale,
-    title: data.title as string,
+    title,
     storyCount: (data.storyCount as number) ?? 3,
     briefCount: (data.briefCount as number) ?? 0,
     sourceCount: (data.sourceCount as number) ?? 0,
+    stories: extractStories(content),
+    slug: postSlug(date, title),
     content,
   };
 }
@@ -39,17 +65,7 @@ export function listPosts(locale: Locale): PostMeta[] {
     .filter((f) => f.endsWith(`.${locale}.md`));
 
   return files
-    .map((f) => {
-      const { data } = matter(fs.readFileSync(path.join(postsDir, f), "utf-8"));
-      return {
-        date: data.date as string,
-        locale: data.locale as Locale,
-        title: data.title as string,
-        storyCount: (data.storyCount as number) ?? 3,
-        briefCount: (data.briefCount as number) ?? 0,
-        sourceCount: (data.sourceCount as number) ?? 0,
-      };
-    })
+    .map((f) => parseFile(path.join(postsDir, f)))
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 

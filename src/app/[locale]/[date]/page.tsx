@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { isLocale, t, locales } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
-import { getPost, allPostDates } from "@/lib/posts";
+import { getPost, allPostDates, listPosts } from "@/lib/posts";
 import { markdownToSafeHtml } from "@/lib/markdown";
 
 export async function generateMetadata({
@@ -13,9 +13,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, date } = await params;
   if (!isLocale(locale)) return {};
-  const post = getPost(date, locale as Locale);
+  const postDate = date.slice(0, 10);
+  const post = getPost(postDate, locale as Locale);
   if (!post) return {};
-  const url = `https://ai-digest.isawesome.work/${locale}/${date}`;
+  const url = `https://ai-digest.isawesome.work/${locale}/${post.slug}`;
   return {
     title: `${post.title} — AI Digest`,
     description: `${post.storyCount} stories curated from ${post.sourceCount} sources.`,
@@ -30,19 +31,20 @@ export async function generateMetadata({
     alternates: {
       canonical: url,
       languages: {
-        en: `/en/${date}`,
-        zh: `/zh/${date}`,
+        en: `/en/${post.slug}`,
+        zh: `/zh/${post.slug}`,
       },
     },
   };
 }
 
 export async function generateStaticParams() {
-  const dates = allPostDates();
   const params: { locale: string; date: string }[] = [];
   for (const locale of locales) {
-    for (const date of dates) {
-      params.push({ locale, date });
+    for (const post of listPosts(locale as Locale)) {
+      // Both the date-only and slug URL render the same page
+      params.push({ locale, date: post.date });
+      params.push({ locale, date: post.slug });
     }
   }
   return params;
@@ -66,12 +68,14 @@ export default async function PostPage({
 }) {
   const { locale, date } = await params;
   if (!isLocale(locale)) notFound();
-  const post = getPost(date, locale as Locale);
+  const postDate = date.slice(0, 10);
+  const post = getPost(postDate, locale as Locale);
   if (!post) notFound();
   const strings = t[locale as Locale];
   const html = await markdownToSafeHtml(post.content);
 
   const otherLocale = locale === "en" ? "zh" : "en";
+  const otherPost = getPost(postDate, otherLocale as Locale);
 
   return (
     <article>
@@ -96,13 +100,15 @@ export default async function PostPage({
           <span>{post.storyCount} {strings.storiesLabel}</span>
           <span style={{ color: "var(--border)" }}>·</span>
           <span>{post.sourceCount} {strings.sources}</span>
-          <Link
-            href={`/${otherLocale}/${date}`}
-            className="ml-auto hover:opacity-70 transition-opacity"
-            style={{ color: "var(--accent)" }}
-          >
-            {strings.langLabel}
-          </Link>
+          {otherPost && (
+            <Link
+              href={`/${otherLocale}/${otherPost.slug}`}
+              className="ml-auto hover:opacity-70 transition-opacity"
+              style={{ color: "var(--accent)" }}
+            >
+              {strings.langLabel}
+            </Link>
+          )}
         </div>
       </div>
 
