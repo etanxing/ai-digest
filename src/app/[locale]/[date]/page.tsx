@@ -5,6 +5,7 @@ import { isLocale, t, locales } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getPost, allPostDates, listPosts } from "@/lib/posts";
 import { markdownToSafeHtml } from "@/lib/markdown";
+import ShareButton from "@/components/ShareButton";
 
 export async function generateMetadata({
   params,
@@ -100,15 +101,18 @@ export default async function PostPage({
           <span>{post.storyCount} {strings.storiesLabel}</span>
           <span style={{ color: "var(--border)" }}>·</span>
           <span>{post.sourceCount} {strings.sources}</span>
-          {otherPost && (
-            <Link
-              href={`/${otherLocale}/${otherPost.slug}`}
-              className="ml-auto hover:opacity-70 transition-opacity"
-              style={{ color: "var(--accent)" }}
-            >
-              {strings.langLabel}
-            </Link>
-          )}
+          <div className="ml-auto flex items-center gap-4">
+            <ShareButton url={`https://ai-digest.isawesome.work/${locale}/${post.slug}`} />
+            {otherPost && (
+              <Link
+                href={`/${otherLocale}/${otherPost.slug}`}
+                className="hover:opacity-70 transition-opacity"
+                style={{ color: "var(--accent)" }}
+              >
+                {strings.langLabel}
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
