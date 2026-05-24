@@ -5,7 +5,7 @@ import { isLocale, t, locales } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getPost, allPostDates, listPosts } from "@/lib/posts";
 import { markdownToSafeHtml } from "@/lib/markdown";
-import ShareButton from "@/components/ShareButton";
+import ShareBar from "@/components/ShareBar";
 
 export async function generateMetadata({
   params,
@@ -101,18 +101,15 @@ export default async function PostPage({
           <span>{post.storyCount} {strings.storiesLabel}</span>
           <span style={{ color: "var(--border)" }}>·</span>
           <span>{post.sourceCount} {strings.sources}</span>
-          <div className="ml-auto flex items-center gap-4">
-            <ShareButton url={`https://ai-digest.isawesome.work/${locale}/${post.slug}`} />
-            {otherPost && (
-              <Link
-                href={`/${otherLocale}/${otherPost.slug}`}
-                className="hover:opacity-70 transition-opacity"
-                style={{ color: "var(--accent)" }}
-              >
-                {strings.langLabel}
-              </Link>
-            )}
-          </div>
+          {otherPost && (
+            <Link
+              href={`/${otherLocale}/${otherPost.slug}`}
+              className="ml-auto hover:opacity-70 transition-opacity"
+              style={{ color: "var(--accent)" }}
+            >
+              {strings.langLabel}
+            </Link>
+          )}
         </div>
       </div>
 
@@ -121,11 +118,16 @@ export default async function PostPage({
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </div>
 
-      {/* Footer nav */}
-      <div
-        className="mt-12 pt-6"
-        style={{ borderTop: "1px solid var(--border)" }}
-      >
+      {/* Share bar */}
+      <div className="mt-10 pt-6" style={{ borderTop: "1px solid var(--border)" }}>
+        <ShareBar
+          url={`https://ai-digest.isawesome.work/${locale}/${post.slug}`}
+          title={post.title}
+        />
+      </div>
+
+      {/* Back link */}
+      <div className="mt-6">
         <Link
           href={`/${locale}`}
           className="text-sm hover:opacity-70 transition-opacity"
