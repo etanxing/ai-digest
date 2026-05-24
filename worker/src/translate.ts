@@ -7,8 +7,9 @@ Translate the following English AI news digest to Simplified Chinese.
 
 Rules:
 - CRITICAL: Every markdown hyperlink MUST appear in the output. Format is [Chinese text](url) — translate the link text but keep the URL exactly unchanged. NEVER drop a link. Example: "[Anthropic's advanced models](https://example.com)" → "[Anthropic的先进模型](https://example.com)"
+- CRITICAL: Translate EVERY word of English prose. This includes: paragraph text, bullet point descriptions, the text after "—" in brief items, and ALL other readable text. Example: "- [Title](url) — AI-heavy IPOs are expected to outperform." → "- [标题](url) — AI密集型IPO预计将表现优异。"
 - Preserve ALL other markdown formatting exactly: ## headings, ### headings, --- dividers, - bullets, **bold**
-- Keep proper nouns in English: company names, model names, product names (OpenAI, Claude, GPT-5, Meta, Anthropic, Google, NVIDIA, etc.)
+- Keep proper nouns in English: company names, model names, product names (OpenAI, Claude, GPT-5, Meta, Anthropic, Google, NVIDIA, SpaceX, etc.)
 - Return ONLY the translated content — title on line 1, blank line, then body. No preamble or explanation.`;
 
 export async function translateToZh(enPost: DigestPost, client: OpenAI): Promise<DigestPost> {
